@@ -59,9 +59,10 @@ class Accumulator extends Component{
                  buttonState={this.props.accumulatorOutputEnable}
                  name={this.props.accumulatorOutputEnable === 1? "Dissable output buffer":"Enable output buffer"}></Button>
 
-                <button onClick={this.props.toggleAddSubtractFlag}>
-                {this.props.addSubtractFlag === 1? "Add":"Subtract"}
-                </button>
+                <Button onClick={this.props.toggleAddSubtractFlag}  
+                 buttonState={this.props.addSubtractFlag}
+                 name={this.props.addSubtractFlag === 1? "Add":"Subtract"}></Button>
+
                 </div>
         );
     }
