@@ -176,7 +176,14 @@ class MainFrontPanel extends Component{
                     }
               
                 }else{
-
+                    const diff = newState.registorAvalue - newState.registorBvalue;
+                    if(diff<0){
+                        newState ={...newState, carryValue : 1};
+                        newState ={...newState, accumulatorValue : (diff+255)};
+                    }else{
+                        newState ={...newState, carryValue : 0};
+                        newState ={...newState, accumulatorValue : diff};
+                    }
                  }
 
 

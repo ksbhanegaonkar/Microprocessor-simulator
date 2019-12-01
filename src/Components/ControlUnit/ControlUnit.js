@@ -416,18 +416,83 @@ class ControlUnit extends Component{
                                             Select Address :
                                             </td>
                                             <td>
-                                            <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[0]} onClick={this.props.loadROMAddressInput} switchPosition="9"></ThreeStateSwitch>
-                                            <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[1]} onClick={this.props.loadROMAddressInput} switchPosition="8"></ThreeStateSwitch>
-                                            <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[2]} onClick={this.props.loadROMAddressInput} switchPosition="7"></ThreeStateSwitch>
-                                            <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[3]} onClick={this.props.loadROMAddressInput} switchPosition="6"></ThreeStateSwitch>
-                                            <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[4]} onClick={this.props.loadROMAddressInput} switchPosition="5"></ThreeStateSwitch>
-                                            <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[5]} onClick={this.props.loadROMAddressInput} switchPosition="4"></ThreeStateSwitch>
-                                            <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[6]} onClick={this.props.loadROMAddressInput} switchPosition="3"></ThreeStateSwitch>
-                                            <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[7]} onClick={this.props.loadROMAddressInput} switchPosition="2"></ThreeStateSwitch>
-                                            <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[8]} onClick={this.props.loadROMAddressInput} switchPosition="1"></ThreeStateSwitch>
-                                            <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[9]} onClick={this.props.loadROMAddressInput} switchPosition="0"></ThreeStateSwitch>
-                                            
+                                                                                <table border="1">
 
+                                    <tbody>
+                                        <tr>
+
+                                            <td>
+                                                    <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[0]} onClick={this.props.loadROMAddressInput} switchPosition="9"></ThreeStateSwitch>
+                                            </td>       
+                                            <td>
+                                                    <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[1]} onClick={this.props.loadROMAddressInput} switchPosition="8"></ThreeStateSwitch>
+                                            </td>
+                                            <td>
+                                                    <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[2]} onClick={this.props.loadROMAddressInput} switchPosition="7"></ThreeStateSwitch>
+                                            </td>
+                                            <td>
+                                                    <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[3]} onClick={this.props.loadROMAddressInput} switchPosition="6"></ThreeStateSwitch>
+                                            </td>
+                                            <td>
+                                                    <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[4]} onClick={this.props.loadROMAddressInput} switchPosition="5"></ThreeStateSwitch>
+                                            </td>
+                                            <td>
+                                                    <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[5]} onClick={this.props.loadROMAddressInput} switchPosition="4"></ThreeStateSwitch>
+                                            </td>     
+                                            <td>
+                                                    <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[6]} onClick={this.props.loadROMAddressInput} switchPosition="3"></ThreeStateSwitch>
+                                            </td>       
+                                            <td>
+                                                    <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[7]} onClick={this.props.loadROMAddressInput} switchPosition="2"></ThreeStateSwitch>
+                                            </td> 
+                                            <td>
+                                                    <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[8]} onClick={this.props.loadROMAddressInput} switchPosition="1"></ThreeStateSwitch>
+                                            </td>   
+                                            <td>
+                                                    <ThreeStateSwitch switchState={this.props.romIndividualAddressBits[9]} onClick={this.props.loadROMAddressInput} switchPosition="0"></ThreeStateSwitch>
+                                            </td>   
+                                        
+
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                            -
+                                            </td>
+                                            <td>
+                                            ZF
+                                            </td>
+                                            <td>
+                                            CF
+                                            </td>
+                                            <td>
+                                            t2
+                                            </td>
+                                            <td>
+                                            t1
+                                            </td>
+                                            <td>
+                                            t0
+                                            </td>
+                                            <td>
+                                            IR7
+                                            </td>
+                                            <td>
+                                            IR6
+                                            </td>
+                                            <td>
+                                            IR5
+                                            </td>
+                                            <td>
+                                            IR4
+                                            </td>
+                                        
+
+                                        </tr>
+                                    </tbody>
+
+
+                                    </table>
                                             
                                             </td>
                                             <td>
