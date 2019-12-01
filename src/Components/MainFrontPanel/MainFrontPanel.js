@@ -49,7 +49,8 @@ class MainFrontPanel extends Component{
         instructionRegisterOutputEnable : 0,
 
         accumulatorValue : 0,
-        carryValue :0,
+        carryValue :1,
+        zeroValue :1,
         addSubtractFlag:0,
         accumulatorOutputEnable:0,
 
@@ -149,7 +150,9 @@ class MainFrontPanel extends Component{
                                     binaryInstructionRegisterValue[0]*Math.pow(2,3) +
                                     binaryTStateCounterValue[3]*Math.pow(2,4) +
                                     binaryTStateCounterValue[2]*Math.pow(2,5) +
-                                    binaryTStateCounterValue[1]*Math.pow(2,6) 
+                                    binaryTStateCounterValue[1]*Math.pow(2,6) +
+                                    this.state.carryValue*Math.pow(2,7) +
+                                    this.state.zeroValue*Math.pow(2,8) 
                                     ;
                                     
                     newState ={...newState, romAddress : newRomAddress  };
@@ -168,20 +171,24 @@ class MainFrontPanel extends Component{
                 if(newState.addSubtractFlag == 0){
                     const sum = newState.registorAvalue + newState.registorBvalue;
                     if(sum>255){
-                        newState ={...newState, carryValue : 1};
+                        newState ={...newState, carryValue : 1,zeroValue : 0};
                         newState ={...newState, accumulatorValue : (sum-255)};
                     }else{
-                        newState ={...newState, carryValue : 0};
+                        newState ={...newState, carryValue : 0,zeroValue : 0};
                         newState ={...newState, accumulatorValue : sum};
                     }
               
                 }else{
                     const diff = newState.registorAvalue - newState.registorBvalue;
                     if(diff<0){
-                        newState ={...newState, carryValue : 1};
+                        newState ={...newState, carryValue : 1,zeroValue : 0};
                         newState ={...newState, accumulatorValue : (diff+255)};
-                    }else{
-                        newState ={...newState, carryValue : 0};
+                    }else if(diff===0){
+                        newState ={...newState, carryValue : 0,zeroValue : 1};
+                        newState ={...newState, accumulatorValue : diff};
+                    }
+                    else{
+                        newState ={...newState, carryValue : 0,zeroValue : 0};
                         newState ={...newState, accumulatorValue : diff};
                     }
                  }
@@ -214,7 +221,9 @@ class MainFrontPanel extends Component{
                             binaryInstructionRegisterValue[0]*Math.pow(2,3) +
                             binaryTStateCounterValue[3]*Math.pow(2,4) +
                             binaryTStateCounterValue[2]*Math.pow(2,5) +
-                            binaryTStateCounterValue[1]*Math.pow(2,6) 
+                            binaryTStateCounterValue[1]*Math.pow(2,6) +
+                            this.state.carryValue*Math.pow(2,7) +
+                            this.state.zeroValue*Math.pow(2,8) 
                             ;
 
                             newState ={...newState,tStateCounterValue:newTStateCounterValue, romAddress : newRomAddress  };
@@ -1025,6 +1034,7 @@ class MainFrontPanel extends Component{
                      toggleAccumulatorOutputEnable={this.toggleAccumulatorOutputEnable.bind(this)} 
                      toggleAddSubtractFlag={this.toggleAddSubtractFlag.bind(this)} 
                      carryValue={this.state.carryValue}
+                     zeroValue={this.state.zeroValue}
                     >   </Accumulator>
                     </td>
                 </tr>

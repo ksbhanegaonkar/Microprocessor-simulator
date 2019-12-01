@@ -35,6 +35,12 @@ class Accumulator extends Component{
                             <td>
                             <EightBitDisplay displayValue={this.props.dec2bin(this.props.firstOperandValue)}></EightBitDisplay>
                             </td>
+                            <td>
+                            Zero : {this.props.zeroValue}
+                            </td>
+                            <td>
+                            <SingleBitDisplay displayValue={this.props.zeroValue === 0?'0':'1'}></SingleBitDisplay>
+                            </td>
                         </tr>
 
                         <tr>
