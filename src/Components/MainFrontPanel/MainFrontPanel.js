@@ -92,7 +92,7 @@ class MainFrontPanel extends Component{
     }
     stopAstableClockPulse(){
         if(this.intervalId !== 0){
-            this.setState({isHalt:1});
+            this.setState({isHalt:1,currentCounterValue:0});
             clearInterval(this.intervalId);
             this.intervalId = 0;
          }
