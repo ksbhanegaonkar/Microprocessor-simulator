@@ -1,5 +1,5 @@
-LDA 0001 <4 bit address> 
-ADD 0010 <4 bit address>
-SUB 0011 <4 bit address>
-OUT 1110
-HLT 1111
+LDA 0001 <4 bit address> // Load provided address value to A register 
+ADD 0010 <4 bit address> // Add value in provided location to A register
+SUB 0011 <4 bit address> // Subtract value in provided location from A register
+OUT 1110 		 // Output value of A register to display unit
+HLT 1111		 // Halt the CPU

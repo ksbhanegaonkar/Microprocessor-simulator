@@ -49,8 +49,8 @@ class MainFrontPanel extends Component{
         instructionRegisterOutputEnable : 0,
 
         accumulatorValue : 0,
-        carryValue :1,
-        zeroValue :1,
+        carryValue :0,
+        zeroValue :0,
         addSubtractFlag:0,
         accumulatorOutputEnable:0,
 
@@ -1111,7 +1111,8 @@ class MainFrontPanel extends Component{
                 </table>
  
        
-      
+            <h3>Gift to PRMIT&R with lots of Love from Kedar Bhanegaonkar.</h3>
+            <h3>Special thanks to Fuladi Sir, Dhembare Sir and Deshmukh Sir.</h3>
       
 
             </div>
