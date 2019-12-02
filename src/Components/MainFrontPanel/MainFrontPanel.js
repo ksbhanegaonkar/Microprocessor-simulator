@@ -9,6 +9,7 @@ import SixteenByteRAM from '../RAM/SixteenByteRAM';
 import SevenSegmentDisplay from '../LedDisplay/SevenSegmentDisplay'
 import ControlUnit from '../ControlUnit/ControlUnit'
 import ThreeBitCounter from './../Counter/ThreeBitCounter';
+import './MainFrontPanel.css';
 
 class MainFrontPanel extends Component{
     intervalId = 0;
@@ -896,6 +897,7 @@ class MainFrontPanel extends Component{
         return (
 
             <div>
+                <h1 className="Heading">Concept of Microprocessor !!</h1>
                 <table>
                     <tbody>
                         <tr>
