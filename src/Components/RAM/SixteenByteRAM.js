@@ -25,7 +25,7 @@ class SixteenByteRAM extends Component{
       downloadFile() {
         var element = document.createElement('a');
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.props.ramData.map(this.props.dec2bin).join('\r\n')));
-        element.setAttribute('download', 'ROM_Bytes.txt');
+        element.setAttribute('download', 'RAMProgram.txt');
       
         element.style.display = 'none';
         document.body.appendChild(element);

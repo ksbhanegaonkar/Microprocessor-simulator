@@ -41,7 +41,16 @@ class Bus extends Component{
                 <EightBitDisplay displayValue={this.props.dec2bin(this.props.currentValue)}></EightBitDisplay>
                 <EightBitDisplay displayValue={this.props.dec2bin(this.props.currentValue)}></EightBitDisplay>
                 <EightBitDisplay displayValue={this.props.dec2bin(this.props.currentValue)}></EightBitDisplay>
-               
+                <EightBitDisplay displayValue={this.props.dec2bin(this.props.currentValue)}></EightBitDisplay>
+                <EightBitDisplay displayValue={this.props.dec2bin(this.props.currentValue)}></EightBitDisplay>
+                <EightBitDisplay displayValue={this.props.dec2bin(this.props.currentValue)}></EightBitDisplay>
+                <EightBitDisplay displayValue={this.props.dec2bin(this.props.currentValue)}></EightBitDisplay>
+                <EightBitDisplay displayValue={this.props.dec2bin(this.props.currentValue)}></EightBitDisplay>
+                <EightBitDisplay displayValue={this.props.dec2bin(this.props.currentValue)}></EightBitDisplay>
+                <EightBitDisplay displayValue={this.props.dec2bin(this.props.currentValue)}></EightBitDisplay>
+                <EightBitDisplay displayValue={this.props.dec2bin(this.props.currentValue)}></EightBitDisplay>
+                <EightBitDisplay displayValue={this.props.dec2bin(this.props.currentValue)}></EightBitDisplay>
+                <EightBitDisplay displayValue={this.props.dec2bin(this.props.currentValue)}></EightBitDisplay>
                 </div>
         );
     }

@@ -9,7 +9,7 @@ class FourBitCounter extends Component{
     render(){
        
         return (
-                <div className="rectangle">
+                <div className="programCounter">
                 Program Counter 
                 <br></br>
                 <FourBitDisplay displayValue={this.props.dec2binFourBit(this.props.currentCounterValue)}></FourBitDisplay>
@@ -30,7 +30,7 @@ class FourBitCounter extends Component{
                 <Button onClick={this.props.toggleCounterOutputEnable}  
                  buttonState={this.props.counterOutputEnable}
                  name={this.props.counterOutputEnable === 1? "Dissable Counter Output (CO)":"Enable Counter Output (CO)"}></Button>
-
+   
                 <Button onClick={this.props.jump}  
                  buttonState={this.props.jumpEnable}
                  name={this.props.jumpEnable === 1? "Dissable Jump (J)":"Enable Jump (J)"}></Button>
