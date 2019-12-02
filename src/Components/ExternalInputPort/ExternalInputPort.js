@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import EightBitDisplay from './../LedDisplay/EightBitDisplay'
 import Switch from './../Basic/Switch'
+import Button from './../Basic/Button'
 import './ExternalInputPort.css';
 
 class ExternnalInputPort extends Component{
@@ -34,9 +35,10 @@ class ExternnalInputPort extends Component{
                 </div>
                
                 <button onClick={this.props.resetExternalInputValue}>Reset</button>
-                <button onClick={this.props.toggleExternalInputBusBufferState}>
-                {this.props.externalInputBusBuffer === 1? "Dissable output buffer":"Enable output buffer"}
-                </button>
+                <Button onClick={this.props.toggleExternalInputBusBufferState}  
+                 buttonState={this.props.externalInputBusBuffer}
+                 name={this.props.externalInputBusBuffer === 1? "Dissable output buffer":"Enable output buffer"}></Button>
+
             </div>);
     }
 }
