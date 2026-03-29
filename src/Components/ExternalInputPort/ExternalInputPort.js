@@ -1,46 +1,36 @@
-import React,{Component} from 'react';
-import EightBitDisplay from './../LedDisplay/EightBitDisplay'
-import Switch from './../Basic/Switch'
-import Button from './../Basic/Button'
-import './ExternalInputPort.css';
+import React from 'react';
+import EightBitDisplay from './../LedDisplay/EightBitDisplay';
+import Switch from './../Basic/Switch';
+import Button from './../Basic/Button';
 
-class ExternnalInputPort extends Component{
+const ExternalInputPort = ({
+  externalInputValue, externalInputIntValue, loadExtrnalInput,
+  resetExternalInputValue, externalInputBusBuffer, toggleExternalInputBusBufferState
+}) => (
+  <div className="card h-100">
+    <div className="card-header d-flex align-items-center gap-2">
+      <span>External Input</span>
+      <EightBitDisplay displayValue={externalInputValue} />
+      <span className="badge bg-info ms-auto">{externalInputIntValue}</span>
+    </div>
+    <div className="card-body p-3">
+      <div className="mb-2">
+        <span className={`badge ${externalInputBusBuffer === 1 ? 'bg-success' : 'bg-secondary'}`}>
+          Output Buffer: {externalInputBusBuffer ? 'ON' : 'OFF'}
+        </span>
+      </div>
+      <div className="d-flex gap-1 mb-2 justify-content-center">
+        {[7, 6, 5, 4, 3, 2, 1, 0].map((pos) => (
+          <Switch key={pos} switchState={externalInputValue[7 - pos]} onClick={loadExtrnalInput} switchPosition={String(pos)} />
+        ))}
+      </div>
+      <div className="d-flex gap-1">
+        <button className="btn btn-sm btn-outline-warning" onClick={resetExternalInputValue}>Reset</button>
+        <Button onClick={toggleExternalInputBusBufferState} buttonState={externalInputBusBuffer}
+          name={externalInputBusBuffer === 1 ? 'Disable Output' : 'Enable Output'} />
+      </div>
+    </div>
+  </div>
+);
 
-    render(){
-        return (
-            <div className="rectangle">
-              External Input
-              <br></br>
-              <EightBitDisplay displayValue={this.props.externalInputValue}></EightBitDisplay>
-              Current Value = {this.props.externalInputIntValue}
-              <br></br>
-              EnableOutputBuffer :  {this.props.externalInputBusBuffer === 1? "1":"0"}
-            <br></br>
-             
-            <br></br>
-           
-                <div>
-                    
-                    
-                    <Switch switchState={this.props.externalInputValue[0]} onClick={this.props.loadExtrnalInput} switchPosition="7"></Switch>
-                    <Switch switchState={this.props.externalInputValue[1]} onClick={this.props.loadExtrnalInput} switchPosition="6"></Switch>
-                    <Switch switchState={this.props.externalInputValue[2]} onClick={this.props.loadExtrnalInput} switchPosition="5"></Switch>
-                    <Switch switchState={this.props.externalInputValue[3]} onClick={this.props.loadExtrnalInput} switchPosition="4"></Switch>
-                    <Switch switchState={this.props.externalInputValue[4]} onClick={this.props.loadExtrnalInput} switchPosition="3"></Switch>
-                    <Switch switchState={this.props.externalInputValue[5]} onClick={this.props.loadExtrnalInput} switchPosition="2"></Switch>
-                    <Switch switchState={this.props.externalInputValue[6]} onClick={this.props.loadExtrnalInput} switchPosition="1"></Switch>
-                    <Switch switchState={this.props.externalInputValue[7]} onClick={this.props.loadExtrnalInput} switchPosition="0"></Switch>
-
-
-                </div>
-               
-                <button onClick={this.props.resetExternalInputValue}>Reset</button>
-                <Button onClick={this.props.toggleExternalInputBusBufferState}  
-                 buttonState={this.props.externalInputBusBuffer}
-                 name={this.props.externalInputBusBuffer === 1? "Dissable output buffer":"Enable output buffer"}></Button>
-
-            </div>);
-    }
-}
-
-export default ExternnalInputPort;
+export default ExternalInputPort;

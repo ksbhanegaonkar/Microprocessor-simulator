@@ -1,40 +1,42 @@
-import React,{Component} from 'react';
+import React from 'react';
 import ClockPannel from './ClockPannel';
-import SingleBitDisplay from './../LedDisplay/SingleBitDisplay'
-import './SystemClock.css';
+import SingleBitDisplay from './../LedDisplay/SingleBitDisplay';
 
-class SystemClock extends Component{
+const SystemClock = (props) => {
+  const { ClockType, CurrentClockState, onClockModeSelect, changeClockState,
+    triggerMonostableClockPulse, triggerAstableClockPulse, stopAstableClockPulse,
+    onAstableClockFrequencyChange, astableClockPeriod } = props;
 
-
-    
-
-    render(){
-        return (
-            <div className="rectangle">
-            Clock
-            <br></br>
-            <SingleBitDisplay displayValue={this.props.CurrentClockState === 0?'0':'1'}></SingleBitDisplay>
-           Select clock mode : 
-           <select value={this.props.ClockType} onChange={this.props.onClockModeSelect}>
-                <option value="A">Astable Clock</option>
-                 <option value="B">Monostable Clock</option>
-                 <option value="C">Bistable Clock</option>
-            </select>
-            <br></br>
-             <ClockPannel pannelType={this.props.ClockType} changeClock={this.props.changeClockState}
-            triggerMonostableClockPulse={this.props.triggerMonostableClockPulse} 
-            triggerAstableClockPulse={this.props.triggerAstableClockPulse} 
-            stopAstableClockPulse={this.props.stopAstableClockPulse} 
-            onAstableClockFrequencyChange={this.props.onAstableClockFrequencyChange} 
-            astableClockPeriod={this.props.astableClockPeriod}
-             ></ClockPannel>
-          
-           Current Clock State = {this.props.CurrentClockState === 0?'0':'1'}
-
-            </div>
-        );
-    }
-
-}
+  return (
+    <div className="card h-100">
+      <div className="card-header d-flex align-items-center gap-2">
+        <span>System Clock</span>
+        <SingleBitDisplay displayValue={CurrentClockState === 0 ? '0' : '1'} />
+        <span className={`badge ms-auto ${CurrentClockState ? 'bg-success' : 'bg-secondary'}`}>
+          {CurrentClockState ? 'HIGH' : 'LOW'}
+        </span>
+      </div>
+      <div className="card-body p-3">
+        <div className="d-flex align-items-center gap-2 mb-2">
+          <label className="form-label mb-0 text-nowrap" style={{ fontSize: '0.8rem' }}>Mode:</label>
+          <select className="form-select form-select-sm" value={ClockType} onChange={onClockModeSelect}>
+            <option value="A">Astable</option>
+            <option value="B">Monostable</option>
+            <option value="C">Bistable</option>
+          </select>
+        </div>
+        <ClockPannel
+          pannelType={ClockType}
+          changeClock={changeClockState}
+          triggerMonostableClockPulse={triggerMonostableClockPulse}
+          triggerAstableClockPulse={triggerAstableClockPulse}
+          stopAstableClockPulse={stopAstableClockPulse}
+          onAstableClockFrequencyChange={onAstableClockFrequencyChange}
+          astableClockPeriod={astableClockPeriod}
+        />
+      </div>
+    </div>
+  );
+};
 
 export default SystemClock;

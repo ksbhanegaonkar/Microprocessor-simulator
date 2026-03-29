@@ -1,75 +1,29 @@
-import React,{Component} from 'react';
-import ThreeBitDisplay  from './../LedDisplay/ThreeBitDisplay';
-import SingleBitDisplay  from './../LedDisplay/SingleBitDisplay';
-import './FourBitCounter.css'
-class ThreeBitCounter extends Component{
+import React from 'react';
+import ThreeBitDisplay from './../LedDisplay/ThreeBitDisplay';
+import SingleBitDisplay from './../LedDisplay/SingleBitDisplay';
 
-   
+const ThreeBitCounter = ({ currentCounterValue, dec2binFourBit }) => {
+  const tStates = [0, 1, 2, 3, 4, 5];
 
-    render(){
-       
-        return (
-                <div className="rectangle">
-                T state Counter 
-                <br></br>
-                Counter Output : {this.props.currentCounterValue}
-                <ThreeBitDisplay displayValue={this.props.dec2binFourBit(this.props.currentCounterValue)}></ThreeBitDisplay>
-               
-    
-                T State position :
-               
-                <table border="2">
-                    <tbody>
-                        <tr>
-                            <td>
-                                T0
-                            </td>
-                            <td>
-                                T1
-                            </td>
-                            <td>
-                                T2
-                            </td>
-                            <td>
-                                T3
-                            </td>
-                            <td>
-                                T4
-                            </td>
-                            <td>
-                                T5
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <SingleBitDisplay displayValue={this.props.currentCounterValue==0?1:0}></SingleBitDisplay>
-                            </td>
-                            <td>
-                                <SingleBitDisplay displayValue={this.props.currentCounterValue==1?1:0}></SingleBitDisplay>
-                            </td>
-                            <td>
-                                <SingleBitDisplay displayValue={this.props.currentCounterValue==2?1:0}></SingleBitDisplay>
-                            </td>
-                            <td>
-                                <SingleBitDisplay displayValue={this.props.currentCounterValue==3?1:0}></SingleBitDisplay>
-                            </td>
-                            <td>
-                                <SingleBitDisplay displayValue={this.props.currentCounterValue==4?1:0}></SingleBitDisplay>
-                            </td>
-                            <td>
-                                <SingleBitDisplay displayValue={this.props.currentCounterValue==5?1:0}></SingleBitDisplay>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-        
-              
-               
-
-
-                </div>
-        );
-    }
+  return (
+    <div className="card h-100">
+      <div className="card-header d-flex align-items-center gap-2">
+        <span>T-State Counter</span>
+        <ThreeBitDisplay displayValue={dec2binFourBit(currentCounterValue)} />
+        <span className="badge bg-info ms-auto">T{currentCounterValue}</span>
+      </div>
+      <div className="card-body p-3">
+        <div className="d-flex gap-2 justify-content-center">
+          {tStates.map((t) => (
+            <div key={t} className="text-center">
+              <div style={{ fontSize: '0.7rem', marginBottom: 4, opacity: 0.7 }}>T{t}</div>
+              <SingleBitDisplay displayValue={currentCounterValue === t ? 1 : 0} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default ThreeBitCounter;

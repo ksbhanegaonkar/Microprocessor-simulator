@@ -1,18 +1,25 @@
 import React from 'react';
 
+const ThreeStateSwitch = ({ switchState, onClick, switchPosition }) => {
+  const nextState = switchState === '1' ? '*' : switchState === '*' ? 0 : 1;
+  const label = String(switchState) === '1' ? '1' : switchState === '*' ? '*' : '0';
+  const variant =
+    String(switchState) === '1' ? 'btn-info' : switchState === '*' ? 'btn-warning' : 'btn-outline-dark';
 
-const ThreeStateSwitch = (prop) => {
-
-    if(prop.switchState == '1'){
-        return <button onClick={()=>prop.onClick(prop.switchPosition,'*')}>1</button>
-    }
-    else if(prop.switchState == '*'){
-        return <button onClick={()=>prop.onClick(prop.switchPosition,0)}>*</button>
-    }
-    else if(prop.switchState == '0'){
-        return <button onClick={()=>prop.onClick(prop.switchPosition,1)}>0</button>
-    }
-
+  return (
+    <button
+      className={`btn btn-sm ${variant} mx-0 px-2`}
+      onClick={() => onClick(switchPosition, nextState)}
+      style={{ 
+        minWidth: 28, 
+        fontFamily: 'monospace', 
+        fontSize: '0.8rem',
+        borderRadius: 4,
+      }}
+    >
+      {label}
+    </button>
+  );
 };
 
 export default ThreeStateSwitch;

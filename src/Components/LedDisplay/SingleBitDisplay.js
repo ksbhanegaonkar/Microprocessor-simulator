@@ -1,17 +1,11 @@
-import React,{Component} from 'react';
-import Led from '../Basic/LED'
-import './EightBitDisplay.css'
-class SingleBitDisplay extends Component{
+import React from 'react';
+import Led from '../Basic/LED';
 
-    render(){
-
-        return (
-            <div className="LedPallet">
-               <Led ledState={this.props.displayValue}></Led>
-            </div>
-        );
-    }
-};
+const SingleBitDisplay = ({ displayValue }) => (
+  <span className="d-inline-flex align-items-center">
+    <Led ledState={displayValue} />
+  </span>
+);
 
 export default SingleBitDisplay;
 

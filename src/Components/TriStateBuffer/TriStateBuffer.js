@@ -1,40 +1,18 @@
-import React, { Component } from 'react';
-import closedSwitch from './../../Images/ClosedTriStateBuffer.png';
-import openSwitch from './../../Images/OpenTriStateBuffer.png';
+import React, { useState } from 'react';
 
-class TriStateBuffer extends Component {
-    state =
-    {
-        switchState : 'Open',
-        buttonLabel : 'Close Buffer'
-    };
+const TriStateBuffer = () => {
+  const [isOpen, setIsOpen] = useState(true);
 
-    getSwitchImage = () =>{
-        if(this.state.switchState==='Closed')
-        return closedSwitch;
-        else 
-        return openSwitch;
-    };
-    changeSwitchState = () =>{
-        if(this.state.switchState==='Closed'){
-            this.setState({switchState:'Open',buttonLabel:'Close Buffer'});
-           
-        }
-        else{
-            this.setState({switchState:'Closed',buttonLabel:'Open Buffer'});
-           
-        }
-       
-    };
-  render() {
-    return (
-     <div>
-          <img src={this.getSwitchImage()} />
-          <button onClick={this.changeSwitchState.bind(this)}>{this.state.buttonLabel}</button>
-          
-     </div>
-    );
-  }
-}
+  return (
+    <div className="d-flex align-items-center gap-2">
+      <span className={`badge ${isOpen ? 'bg-warning text-dark' : 'bg-success'}`}>
+        {isOpen ? 'OPEN' : 'CLOSED'}
+      </span>
+      <button className="btn btn-sm btn-outline-secondary" onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? 'Close Buffer' : 'Open Buffer'}
+      </button>
+    </div>
+  );
+};
 
 export default TriStateBuffer;

@@ -1,13 +1,103 @@
-body {
-
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --bs-body-bg: #0d1117;
+  --bs-body-color: #c9d1d9;
+  --accent: #58a6ff;
+  --accent-dim: #1f6feb;
+  --surface: #161b22;
+  --surface-light: #21262d;
+  --border: #30363d;
+  --led-on: #00ff41;
+  --led-off: #1a1a2e;
+  --led-dont-care: #ffd700;
+  --danger: #f85149;
+  --success: #3fb950;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+.card {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  transition: box-shadow 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 0 15px rgba(88, 166, 255, 0.1);
+}
+
+.card-header {
+  background: var(--surface-light) !important;
+  border-bottom-color: var(--border) !important;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.btn-outline-info {
+  --bs-btn-color: var(--accent);
+  --bs-btn-border-color: var(--accent);
+}
+
+.form-select, .form-control {
+  background-color: var(--surface-light) !important;
+  border-color: var(--border) !important;
+  color: var(--bs-body-color) !important;
+}
+
+.form-select:focus, .form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(88, 166, 255, 0.25) !important;
+}
+
+.badge {
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--bs-body-color);
+  --bs-table-border-color: var(--border);
+}
+
+.modal-content {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--bs-body-color);
+}
+
+.modal-header {
+  border-bottom-color: var(--border) !important;
+}
+
+.modal-footer {
+  border-top-color: var(--border) !important;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-dim);
 }

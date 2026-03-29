@@ -1,197 +1,120 @@
-import React,{Component} from 'react';
+import React, { useState, useCallback } from 'react';
 import EightBitDisplay from '../LedDisplay/EightBitDisplay';
 import FourBitDisplay from './../LedDisplay/FourBitDisplay';
-import SixteenByteRAMDataDisplay from './SixteenByteRAMDataDisplay'
-import Switch from './../Basic/Switch'
-import './SixteenByteRAM.css'
+import SixteenByteRAMDataDisplay from './SixteenByteRAMDataDisplay';
+import Switch from './../Basic/Switch';
 import RAMFileUpload from '../FileUpload/RAMFileUpload';
-import Button from '../Basic/Button'
+import Button from '../Basic/Button';
 
-class SixteenByteRAM extends Component{
- 
-    constructor() {
-        super();
-        this.state = {
-          showPopup: false
-        };
-      }
+const SixteenByteRAM = (props) => {
+  const [showPopup, setShowPopup] = useState(false);
+  const {
+    dec2bin, dec2binFourBit, ramData, ramAddress, loadRAMDataInput, loadRAMAddressInput,
+    ramMode, onRAMModeSelect, updateRamData, ramProgramData, clearRAMInputData,
+    clearRAMAddressInput, incrementRAMAddress, decrementRAMAddress, downloadRamData,
+    ramAddressInputEnable, ramDataOutputEnable, toggleRamAddressInputEnable,
+    toggleRamDataOutputEnable, uploadRAMDataFromFile
+  } = props;
 
-      togglePopup() {
-        this.setState({
-          showPopup: !this.state.showPopup
-        });
-      }
+  const downloadFile = useCallback(() => {
+    const el = document.createElement('a');
+    el.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(ramData.map(dec2bin).join('\r\n')));
+    el.setAttribute('download', 'RAMProgram.txt');
+    el.style.display = 'none';
+    document.body.appendChild(el);
+    el.click();
+    document.body.removeChild(el);
+  }, [ramData, dec2bin]);
 
-      downloadFile() {
-        var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.props.ramData.map(this.props.dec2bin).join('\r\n')));
-        element.setAttribute('download', 'RAMProgram.txt');
-      
-        element.style.display = 'none';
-        document.body.appendChild(element);
-      
-        element.click();
-      
-        document.body.removeChild(element);
-      }
+  const renderProgramMode = () => {
+    const addrBin = dec2binFourBit(ramAddress);
+    const dataBin = dec2bin(ramProgramData);
+    return (
+      <div className="mt-2">
+        <div className="mb-2">
+          <label className="form-label mb-1" style={{ fontSize: '0.75rem' }}>Data Input:</label>
+          <div className="d-flex gap-1 justify-content-center">
+            {[7,6,5,4,3,2,1,0].map(pos => (
+              <Switch key={pos} switchState={dataBin[7-pos]} onClick={loadRAMDataInput} switchPosition={String(pos)} />
+            ))}
+          </div>
+        </div>
+        <div className="mb-2">
+          <label className="form-label mb-1" style={{ fontSize: '0.75rem' }}>Address:</label>
+          <div className="d-flex gap-1 justify-content-center">
+            {[3,2,1,0].map(pos => (
+              <Switch key={pos} switchState={addrBin[3-pos]} onClick={loadRAMAddressInput} switchPosition={String(pos)} />
+            ))}
+          </div>
+        </div>
+        <div className="d-flex flex-wrap gap-1 justify-content-center">
+          <button className="btn btn-sm btn-outline-secondary" onClick={clearRAMAddressInput}>Clear Addr</button>
+          <button className="btn btn-sm btn-outline-secondary" onClick={clearRAMInputData}>Clear Data</button>
+          <button className="btn btn-sm btn-outline-info" onClick={downloadRamData}>Download</button>
+          <button className="btn btn-sm btn-outline-secondary" onClick={decrementRAMAddress}>Addr--</button>
+          <button className="btn btn-sm btn-outline-secondary" onClick={incrementRAMAddress}>Addr++</button>
+          <button className="btn btn-sm btn-primary" onClick={updateRamData}>Upload Byte</button>
+        </div>
+      </div>
+    );
+  };
 
-    render(){
+  const renderRunMode = () => (
+    <div className="mt-2">
+      <div className="d-flex flex-wrap gap-1 mb-2">
+        <Button onClick={toggleRamAddressInputEnable} buttonState={ramAddressInputEnable}
+          name={ramAddressInputEnable === 1 ? 'Disable RAI' : 'Enable RAI'} />
+        <Button onClick={toggleRamDataOutputEnable} buttonState={ramDataOutputEnable}
+          name={ramDataOutputEnable === 1 ? 'Disable RO' : 'Enable RO'} />
+      </div>
+      <button className="btn btn-sm btn-outline-info" onClick={() => setShowPopup(true)}>Show RAM Data</button>
+      {showPopup && (
+        <SixteenByteRAMDataDisplay dec2bin={dec2bin} dec2binFourBit={dec2binFourBit}
+          ramData={ramData} closePopup={() => setShowPopup(false)} />
+      )}
+    </div>
+  );
 
-        return(
-               
-                <div className="sixteenBitRAM">
-                 RAM
-                  <br></br>
-                  Mode : 
-                  <select value={this.props.ramMode} onChange={this.props.onRAMModeSelect}>
-                        <option value="Run">Run</option>
-                        <option value="Program">Program</option>
-                        <option value="File Upload">File Upload</option>
-                    </select>
-                  <table>
-                    <tbody>
-                    <tr>
-                        <td>
-                        Value : {this.props.ramData[this.props.ramAddress]}
-                        </td>
-                        <td>
-                        <EightBitDisplay displayValue={this.props.dec2bin(this.props.ramData[this.props.ramAddress])}></EightBitDisplay>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                        Address :  {this.props.ramAddress}
-                        </td>
-                        <td>
-                          <FourBitDisplay displayValue={this.props.dec2binFourBit(this.props.ramAddress)}></FourBitDisplay>
-                        </td>
-                      </tr>
+  const renderFileMode = () => (
+    <div className="mt-2">
+      <button className="btn btn-sm btn-outline-info mb-2" onClick={downloadFile}>Download File</button>
+      <RAMFileUpload uploadDataFromFile={uploadRAMDataFromFile} />
+    </div>
+  );
 
-                    </tbody>
-                  </table>
-                  {this.getModeBasedPanel(this.props.ramMode)}
-                
-                <br></br>
-
-                </div>
-        );
-    }
-
-    getModeBasedPanel(mode){
-        if(mode === 'Program'){
-          let ramAddressBinaryValue = this.props.dec2binFourBit(this.props.ramAddress);
-          let ramDataBinaryValue = this.props.dec2bin(this.props.ramProgramData);
-          return(
-            <div>
-
-            <table>
-              <tbody>
-                
-              <tr>
-                  <td>
-                  Enter data : 
-                  </td>
-                  <td colSpan="2">
-                  <Switch switchState={ramDataBinaryValue[0]} onClick={this.props.loadRAMDataInput} switchPosition="7"></Switch>
-                  <Switch switchState={ramDataBinaryValue[1]} onClick={this.props.loadRAMDataInput} switchPosition="6"></Switch>
-                  <Switch switchState={ramDataBinaryValue[2]} onClick={this.props.loadRAMDataInput} switchPosition="5"></Switch>
-                  <Switch switchState={ramDataBinaryValue[3]} onClick={this.props.loadRAMDataInput} switchPosition="4"></Switch>
-                  <Switch switchState={ramDataBinaryValue[4]} onClick={this.props.loadRAMDataInput} switchPosition="3"></Switch>
-                  <Switch switchState={ramDataBinaryValue[5]} onClick={this.props.loadRAMDataInput} switchPosition="2"></Switch>
-                  <Switch switchState={ramDataBinaryValue[6]} onClick={this.props.loadRAMDataInput} switchPosition="1"></Switch>
-                  <Switch switchState={ramDataBinaryValue[7]} onClick={this.props.loadRAMDataInput} switchPosition="0"></Switch>
-
-                  </td>
-
-                </tr>
-                <tr>
-                  <td>
-                  Select Address :
-                  </td>
-                  <td>
-                  <Switch switchState={ramAddressBinaryValue[0]} onClick={this.props.loadRAMAddressInput} switchPosition="3"></Switch>
-                 <Switch switchState={ramAddressBinaryValue[1]} onClick={this.props.loadRAMAddressInput} switchPosition="2"></Switch>
-                <Switch switchState={ramAddressBinaryValue[2]} onClick={this.props.loadRAMAddressInput} switchPosition="1"></Switch>
-                  <Switch switchState={ramAddressBinaryValue[3]} onClick={this.props.loadRAMAddressInput} switchPosition="0"></Switch>
-                 
-                 </td>
-                  <td>
-                  
-                  </td>
-                </tr>
-                <tr>
-                        <td>
-                        <button onClick={this.props.clearRAMAddressInput}>Clear Address</button>
-                        </td>
-                        <td>
-                        <button onClick={this.props.clearRAMInputData}>Clear Data</button>
-                        </td>
-                        <td>
-                        <button onClick={this.props.downloadRamData}>Download Byte</button>
-                        </td>
-                </tr>
-                <tr>
-                         <td>
-                        <button onClick={this.props.decrementRAMAddress}>Address--</button>
-                        </td>
-                        <td>
-                        <button onClick={this.props.incrementRAMAddress}>Address++</button>
-                        </td>
-                        <td>
-                        <button onClick={this.props.updateRamData}>Upoad Byte</button>
-                        </td>
-                      </tr>
-              </tbody>
-            </table>
-
-
-
-               
-
-            </div>
-          );
-        }
-        else if(mode === 'Run') {
-            return (
-              <div>
-                <br></br>
-                <Button onClick={this.props.toggleRamAddressInputEnable}  
-                 buttonState={this.props.ramAddressInputEnable}
-                 name={this.props.ramAddressInputEnable === 1? "Disable RAM Address In (RAI)":"Enable RAM Address In (RAI)"}></Button>
-
-                <Button onClick={this.props.toggleRamDataOutputEnable}  
-                 buttonState={this.props.ramDataOutputEnable}
-                 name={this.props.ramDataOutputEnable === 1? "Dissable RAM Data Out (RO)":"Enable RAM Data Out (RO)"}></Button>
-
-         
-              <br></br>
-              <br></br>
-                                <button onClick={this.togglePopup.bind(this)}>Show RAM Data</button>
-
-                                {this.state.showPopup ? 
-                                <SixteenByteRAMDataDisplay
-                                dec2bin={this.props.dec2bin} 
-                                dec2binFourBit={this.props.dec2binFourBit} 
-                                ramData={this.props.ramData} 
-                                    closePopup={this.togglePopup.bind(this)}
-                                />
-                                : null
-                                }
-
-                      </div>
-
-            );
-        }
-        else if(mode === 'File Upload'){
-          
-         return(<div>
-
-          <button onClick={this.downloadFile.bind(this)}>Download file</button>
-           <RAMFileUpload uploadDataFromFile={this.props.uploadRAMDataFromFile} ></RAMFileUpload>
-         </div>);
-
-        }
-    }
+  return (
+    <div className="card h-100">
+      <div className="card-header d-flex align-items-center gap-2">
+        <span>RAM (16 Bytes)</span>
+        <select className="form-select form-select-sm ms-auto" style={{ width: 'auto' }} value={ramMode} onChange={onRAMModeSelect}>
+          <option value="Run">Run</option>
+          <option value="Program">Program</option>
+          <option value="File Upload">File Upload</option>
+        </select>
+      </div>
+      <div className="card-body p-3">
+        <div className="d-flex justify-content-between align-items-center mb-2" style={{ fontSize: '0.8rem' }}>
+          <div className="d-flex align-items-center gap-2">
+            <span className="text-muted">Value:</span>
+            <span className="fw-bold">{ramData[ramAddress]}</span>
+            <EightBitDisplay displayValue={dec2bin(ramData[ramAddress])} />
+          </div>
+          <div className="d-flex align-items-center gap-2">
+            <span className="text-muted">Addr:</span>
+            <span className="fw-bold">{ramAddress}</span>
+            <FourBitDisplay displayValue={dec2binFourBit(ramAddress)} />
+          </div>
+        </div>
+        <div className="d-flex flex-wrap gap-1 mb-1">
+          <span className={`badge ${ramAddressInputEnable ? 'bg-success' : 'bg-secondary'}`}>RAI: {ramAddressInputEnable}</span>
+          <span className={`badge ${ramDataOutputEnable ? 'bg-success' : 'bg-secondary'}`}>RO: {ramDataOutputEnable}</span>
+        </div>
+        {ramMode === 'Program' && renderProgramMode()}
+        {ramMode === 'Run' && renderRunMode()}
+        {ramMode === 'File Upload' && renderFileMode()}
+      </div>
+    </div>
+  );
 };
 
 export default SixteenByteRAM;

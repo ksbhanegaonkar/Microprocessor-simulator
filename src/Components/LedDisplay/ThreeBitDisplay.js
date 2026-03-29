@@ -1,18 +1,13 @@
-import React,{Component} from 'react';
-import Led from '../Basic/LED'
-import './FourBitDisplay.css'
-class ThreeBitDisplay extends Component{
+import React from 'react';
+import Led from '../Basic/LED';
 
-    render(){
-        return (
-            <div className="LedPallet">
-               <Led ledState={this.props.displayValue[1]}></Led>
-               <Led ledState={this.props.displayValue[2]}></Led>
-               <Led ledState={this.props.displayValue[3]}></Led>
-            </div>
-        );
-    }
-};
+const ThreeBitDisplay = ({ displayValue }) => (
+  <span className="d-inline-flex align-items-center gap-0">
+    {[1, 2, 3].map((i) => (
+      <Led key={i} ledState={displayValue[i]} />
+    ))}
+  </span>
+);
 
 export default ThreeBitDisplay;
 

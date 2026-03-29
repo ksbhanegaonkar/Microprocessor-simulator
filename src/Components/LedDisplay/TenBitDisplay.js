@@ -1,26 +1,13 @@
-import React,{Component} from 'react';
-import Led from '../Basic/LED'
-import './EightBitDisplay.css'
-class TenBitDisplay extends Component{
+import React from 'react';
+import Led from '../Basic/LED';
 
-    render(){
-
-        return (
-            <div className="LedPallet">
-               <Led ledState={this.props.displayValue[0]}></Led>
-               <Led ledState={this.props.displayValue[1]}></Led>
-               <Led ledState={this.props.displayValue[2]}></Led>
-               <Led ledState={this.props.displayValue[3]}></Led>
-               <Led ledState={this.props.displayValue[4]}></Led>
-               <Led ledState={this.props.displayValue[5]}></Led>
-               <Led ledState={this.props.displayValue[6]}></Led>
-               <Led ledState={this.props.displayValue[7]}></Led>
-               <Led ledState={this.props.displayValue[8]}></Led>
-               <Led ledState={this.props.displayValue[9]}></Led>
-            </div>
-        );      
-    }
-};
+const TenBitDisplay = ({ displayValue }) => (
+  <span className="d-inline-flex align-items-center gap-0">
+    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
+      <Led key={i} ledState={displayValue[i]} />
+    ))}
+  </span>
+);
 
 export default TenBitDisplay;
 

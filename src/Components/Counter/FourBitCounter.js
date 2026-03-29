@@ -1,48 +1,36 @@
-import React,{Component} from 'react';
-import FourBitDisplay  from './../LedDisplay/FourBitDisplay';
-import './FourBitCounter.css'
+import React from 'react';
+import FourBitDisplay from './../LedDisplay/FourBitDisplay';
 import Button from '../Basic/Button';
-class FourBitCounter extends Component{
 
-   
+const FourBitCounter = (props) => {
+  const { currentCounterValue, isCounterEnable, dec2binFourBit,
+    counterOutputEnable, toggleCounterOutputEnable, toggleCountEnable,
+    jump, jumpEnable } = props;
 
-    render(){
-       
-        return (
-                <div className="programCounter">
-                Program Counter 
-                <br></br>
-                <FourBitDisplay displayValue={this.props.dec2binFourBit(this.props.currentCounterValue)}></FourBitDisplay>
-                Counter Output : {this.props.currentCounterValue}
-                <br></br>
-                Count Enable : {this.props.isCounterEnable}
-                <br></br>
-                Counter Output Enable : {this.props.counterOutputEnable}
-               
-            <br></br>
-        
-              
-               
-                <Button onClick={this.props.toggleCountEnable}  
-                 buttonState={this.props.isCounterEnable}
-                 name={this.props.isCounterEnable === 1? "Dissable Count (CE)":"Enable Count (CE)"}></Button>
-
-                <Button onClick={this.props.toggleCounterOutputEnable}  
-                 buttonState={this.props.counterOutputEnable}
-                 name={this.props.counterOutputEnable === 1? "Dissable Counter Output (CO)":"Enable Counter Output (CO)"}></Button>
-   
-                <Button onClick={this.props.jump}  
-                 buttonState={this.props.jumpEnable}
-                 name={this.props.jumpEnable === 1? "Dissable Jump (J)":"Enable Jump (J)"}></Button>
-
-
-
-      
-               
-
-                </div>
-        );
-    }
+  return (
+    <div className="card h-100">
+      <div className="card-header d-flex align-items-center gap-2">
+        <span>Program Counter</span>
+        <FourBitDisplay displayValue={dec2binFourBit(currentCounterValue)} />
+        <span className="badge bg-info ms-auto">{currentCounterValue}</span>
+      </div>
+      <div className="card-body p-3">
+        <div className="d-flex flex-wrap gap-1 mb-2">
+          <span className={`badge ${isCounterEnable ? 'bg-success' : 'bg-secondary'}`}>CE: {isCounterEnable}</span>
+          <span className={`badge ${counterOutputEnable ? 'bg-success' : 'bg-secondary'}`}>CO: {counterOutputEnable}</span>
+          <span className={`badge ${jumpEnable ? 'bg-warning text-dark' : 'bg-secondary'}`}>JP: {jumpEnable}</span>
+        </div>
+        <div className="d-flex flex-wrap gap-1">
+          <Button onClick={toggleCountEnable} buttonState={isCounterEnable}
+            name={isCounterEnable === 1 ? 'Disable CE' : 'Enable CE'} />
+          <Button onClick={toggleCounterOutputEnable} buttonState={counterOutputEnable}
+            name={counterOutputEnable === 1 ? 'Disable CO' : 'Enable CO'} />
+          <Button onClick={jump} buttonState={jumpEnable}
+            name={jumpEnable === 1 ? 'Disable JP' : 'Enable JP'} />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default FourBitCounter;
