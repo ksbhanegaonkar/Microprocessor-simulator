@@ -9,6 +9,8 @@ import SixteenByteRAM from '../RAM/SixteenByteRAM';
 import SevenSegmentDisplay from '../LedDisplay/SevenSegmentDisplay';
 import ControlUnit from '../ControlUnit/ControlUnit';
 import ThreeBitCounter from './../Counter/ThreeBitCounter';
+import ExecutionTracer from '../ExecutionTracer/ExecutionTracer';
+import SamplePrograms from '../SamplePrograms/SamplePrograms';
 
 /* ───── helpers (pure) ───── */
 const dec2bin = (dec) => (parseInt(dec, 10).toString(2)).padStart(8, '0');
@@ -470,14 +472,87 @@ const MainFrontPanel = () => {
   const enableCounter = useCallback(() => setState(prev => ({ ...prev, isCounterEnable: 1 })), []);
   const dissableCounter = useCallback(() => setState(prev => ({ ...prev, isCounterEnable: 0 })), []);
 
+  /* ───── sample program loader ───── */
+  const loadSampleProgram = useCallback((ramData, romData) => {
+    /* Stop any running clock, then load both RAM + ROM and apply initial control word */
+    if (intervalIdRef.current !== 0) {
+      clearInterval(intervalIdRef.current);
+      intervalIdRef.current = 0;
+    }
+    busSignalRef.current = {};
+    setState(prev => {
+      const fresh = {
+        ...prev,
+        CurrentClockState: 0, isHalt: 0,
+        currentCounterValue: 0, tStateCounterValue: 0, romAddress: 0,
+        registorAvalue: 0, registorBvalue: 0,
+        instructionRegisterValue: 0, accumulatorValue: 0,
+        carryValue: 0, zeroValue: 0, addSubtractFlag: 0,
+        outputDisplayValue: 0, ramAddress: 0, dataOnBus: 255,
+        ramData: ramData, romData: romData, ramMode: 'Run',
+        controlUnitMode: 'AutoControl',
+      };
+      return applyControlWordToState(fresh, romData[0]);
+    });
+  }, [applyControlWordToState]);
+
+  /* ───── CPU reset ───── */
+  const resetCPU = useCallback(() => {
+    if (intervalIdRef.current !== 0) {
+      clearInterval(intervalIdRef.current);
+      intervalIdRef.current = 0;
+    }
+    busSignalRef.current = {};
+    setState(prev => {
+      const fresh = {
+        ...prev,
+        CurrentClockState: 0, isHalt: 0,
+        currentCounterValue: 0, tStateCounterValue: 0, romAddress: 0,
+        registorAvalue: 0, registorBvalue: 0,
+        instructionRegisterValue: 0, accumulatorValue: 0,
+        carryValue: 0, zeroValue: 0, addSubtractFlag: 0,
+        outputDisplayValue: 0, ramAddress: 0, dataOnBus: 255,
+      };
+      if (prev.romData[0]) return applyControlWordToState(fresh, prev.romData[0]);
+      return fresh;
+    });
+  }, [applyControlWordToState]);
+
+  /* ───── data flow highlight helpers ───── */
+  const hlClass = (...conditions) => {
+    const sending = conditions.some(c => c === 'send');
+    const receiving = conditions.some(c => c === 'recv');
+    if (sending && receiving) return 'data-sending data-receiving';
+    if (sending) return 'data-sending';
+    if (receiving) return 'data-receiving';
+    return '';
+  };
+
   /* ═══════════════════════════════════════════════════════════
      RENDER
      ═══════════════════════════════════════════════════════════ */
   return (
     <div className="container-fluid px-3 py-3" style={{ maxWidth: 1400 }}>
-      <h2 className="text-center mb-3" style={{ color: 'var(--accent, #58a6ff)', letterSpacing: 2, fontWeight: 700 }}>
-        Microprocessor Simulator
-      </h2>
+      {/* ── Title + subtitle ── */}
+      <div className="text-center mb-2">
+        <h2 className="mb-0" style={{ color: 'var(--accent, #58a6ff)', letterSpacing: 2, fontWeight: 700 }}>
+          Microprocessor Simulator
+        </h2>
+        <div className="text-muted" style={{ fontSize: '0.75rem', letterSpacing: 1 }}>
+          SAP-1 Architecture — 4-Bit Educational Simulator
+        </div>
+      </div>
+
+      {/* ── Reset button ── */}
+      <div className="d-flex justify-content-end mb-2">
+        <button className="btn btn-outline-danger btn-sm" onClick={resetCPU}
+          style={{ fontSize: '0.72rem', padding: '3px 14px' }}>
+          ↺ Reset CPU
+        </button>
+      </div>
+
+      {/* ── Sample Programs ── */}
+      <SamplePrograms onLoadProgram={loadSampleProgram} />
 
       <div className="row g-3">
         {/* LEFT COLUMN */}
@@ -491,6 +566,7 @@ const MainFrontPanel = () => {
             onAstableClockFrequencyChange={onAstableClockFrequencyChange}
             astableClockPeriod={state.astableClockPeriod}
           />
+          <div className={hlClass(state.ramDataOutputEnable ? 'send' : null, state.ramAddressInputEnable ? 'recv' : null)}>
           <SixteenByteRAM
             dec2bin={dec2bin} dec2binFourBit={dec2binFourBit}
             ramData={state.ramData} ramAddress={state.ramAddress}
@@ -506,6 +582,8 @@ const MainFrontPanel = () => {
             toggleRamDataOutputEnable={toggleRamDataOutputEnable}
             uploadRAMDataFromFile={uploadRAMDataFromFile}
           />
+          </div>
+          <div className={hlClass(state.instructionRegisterOutputEnable ? 'send' : null, state.instructionRegisterInputEnable ? 'recv' : null)}>
           <EightBitRegistor
             dec2bin={dec2bin} registorName="Instruction Register"
             registorvalue={state.instructionRegisterValue}
@@ -514,6 +592,8 @@ const MainFrontPanel = () => {
             toggleRegistorInputEnableState={toggleInstructionRegistorInputEnable}
             toggleRegistorOutputEnableState={toggleInstructionRegistorOutputEnable}
           />
+          </div>
+          <div className={hlClass(state.externalInputBusBuffer ? 'send' : null)}>
           <ExternalInputPort
             externalInputValue={dec2bin(state.externalInputValue)}
             externalInputIntValue={state.externalInputValue}
@@ -523,16 +603,18 @@ const MainFrontPanel = () => {
             externalInputBusBuffer={state.externalInputBusBuffer}
             toggleExternalInputBusBufferState={toggleExternalInputBusBufferState}
           />
+          </div>
           <ThreeBitCounter currentCounterValue={state.tStateCounterValue} dec2binFourBit={dec2binFourBit} />
         </div>
 
         {/* CENTER — BUS */}
-        <div className="col-lg-1 col-md-2 d-flex align-items-stretch justify-content-center">
+        <div className={`col-lg-1 col-md-2 d-flex align-items-stretch justify-content-center ${Object.keys(busSignalRef.current).length > 0 ? 'bus-active' : ''}`}>
           <EightBitBus currentValue={state.dataOnBus} dec2bin={dec2bin} />
         </div>
 
         {/* RIGHT COLUMN */}
         <div className="col-lg-4 col-md-5 d-flex flex-column gap-3">
+          <div className={hlClass(state.counterOutputEnable ? 'send' : null, state.jumpEnable ? 'recv' : null)}>
           <FourBitCounter
             currentCounterValue={state.currentCounterValue}
             isCounterEnable={state.isCounterEnable}
@@ -543,6 +625,8 @@ const MainFrontPanel = () => {
             toggleCountEnable={toggleCountEnable}
             jump={jump} jumpEnable={state.jumpEnable}
           />
+          </div>
+          <div className={hlClass(state.registorAOutputEnable ? 'send' : null, state.registorAInputEnable ? 'recv' : null)}>
           <EightBitRegistor
             dec2bin={dec2bin} registorName="Register A"
             registorvalue={state.registorAvalue}
@@ -551,6 +635,8 @@ const MainFrontPanel = () => {
             toggleRegistorInputEnableState={toggleRegistorAInputEnableState}
             toggleRegistorOutputEnableState={toggleRegistorAOutputEnableState}
           />
+          </div>
+          <div className={hlClass(state.accumulatorOutputEnable ? 'send' : null)}>
           <Accumulator
             dec2bin={dec2bin}
             firstOperandValue={state.registorAvalue} secondOperandValue={state.registorBvalue}
@@ -561,6 +647,8 @@ const MainFrontPanel = () => {
             carryValue={state.carryValue} zeroValue={state.zeroValue}
             currentValue={state.accumulatorValue}
           />
+          </div>
+          <div className={hlClass(state.registorBOutputEnable ? 'send' : null, state.registorBInputEnable ? 'recv' : null)}>
           <EightBitRegistor
             dec2bin={dec2bin} registorName="Register B"
             registorvalue={state.registorBvalue}
@@ -569,11 +657,21 @@ const MainFrontPanel = () => {
             toggleRegistorInputEnableState={toggleRegistorBInputEnableState}
             toggleRegistorOutputEnableState={toggleRegistorBOutputEnableState}
           />
+          </div>
+          <div className={hlClass(state.outputDisplayInputEnable ? 'recv' : null)}>
           <SevenSegmentDisplay
             displayValue={state.outputDisplayValue}
             toggleOutputDisplayInputEnable={toggleOutputDisplayInputEnable}
             outputDisplayInputEnable={state.outputDisplayInputEnable}
           />
+          </div>
+        </div>
+      </div>
+
+      {/* ── Learning Dashboard ── */}
+      <div className="row g-3 mt-2">
+        <div className="col-12">
+          <ExecutionTracer state={state} />
         </div>
       </div>
 
