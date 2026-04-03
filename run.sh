@@ -5,11 +5,11 @@ IMAGE_NAME="microprocessor-simulator"
 CONTAINER_NAME="microprocessor-simulator"
 PORT=8089
 
-docker build -t "$IMAGE_NAME" .
+podman build -t "$IMAGE_NAME" .
 
-docker rm -f "$CONTAINER_NAME" 2>/dev/null || true
+podman rm -f "$CONTAINER_NAME" 2>/dev/null || true
 
-docker run -d \
+podman run -d \
   --name "$CONTAINER_NAME" \
   -p "$PORT:$PORT" \
   --restart unless-stopped \
