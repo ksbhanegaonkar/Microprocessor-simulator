@@ -18,9 +18,6 @@ FROM nginx:stable-alpine
 
 COPY --from=builder /app/build /usr/share/nginx/html
 
-EXPOSE 8089
-
-RUN sed -i 's/listen\s*80;/listen 8089;/g' /etc/nginx/conf.d/default.conf && \
-    sed -i 's/listen\s*\[::\]:80;/listen [::]:8089;/g' /etc/nginx/conf.d/default.conf
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]

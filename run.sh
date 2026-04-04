@@ -11,7 +11,7 @@ podman rm -f "$CONTAINER_NAME" 2>/dev/null || true
 
 podman run -d \
   --name "$CONTAINER_NAME" \
-  -p "$PORT:$PORT" \
+  -p "$PORT:80" \
   --restart unless-stopped \
   "$IMAGE_NAME"
 
